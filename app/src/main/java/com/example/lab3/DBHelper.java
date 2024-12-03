@@ -12,7 +12,7 @@ import java.util.Calendar;
 public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "students.db"; // Имя базы данных
-    private static final int DB_VERSION = 1; // Версия базы данных
+    private static final int DB_VERSION = 2; // Версия базы данных
     DateFormat df = new SimpleDateFormat("HH:mm:ss");
 
     DBHelper(Context context) {
@@ -21,69 +21,90 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE students ("
-                + "_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + "FIO TEXT, "
-                + "TIME TEXT);");
-
-        db.execSQL("DELETE FROM students;");
-        ContentValues studentValues = new ContentValues();
-        String date = df.format(Calendar.getInstance().getTime());
-
-        studentValues.put("FIO", "Андрианов Владислав Алексеевич");
-        studentValues.put("TIME", date);
-        db.insert("students", null, studentValues);
-
-        studentValues.put("FIO", "Бочаров Евгений Юрьевич");
-        studentValues.put("TIME", date);
-        db.insert("students", null, studentValues);
-
-        studentValues.put("FIO", "Бажинов Иван Сергеевич");
-        studentValues.put("TIME", date);
-        db.insert("students", null, studentValues);
-
-        studentValues.put("FIO", "Петров Петр Петрович");
-        studentValues.put("TIME", date);
-        db.insert("students", null, studentValues);
-
-        studentValues.put("FIO", "Романов Роман Романович");
-        studentValues.put("TIME", date);
-        db.insert("students", null, studentValues);
+        updateDB(db,0,DB_VERSION);
     }
 
     public void resetStudentsTable() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM students;");
 
-        // Вставка новых значений
         ContentValues studentValues = new ContentValues();
         String date = df.format(Calendar.getInstance().getTime());
 
-        // Добавляйте записи
-        studentValues.put("FIO", "Андрианов Владислав Алексеевич");
+        studentValues.put("First_Name", "Андрианов");
+        studentValues.put("Name", " Владислав");
+        studentValues.put("Patronymic", "Алексеевич");
         studentValues.put("TIME", date);
         db.insert("students", null, studentValues);
 
-        studentValues.put("FIO", "Бочаров Евгений Юрьевич");
+        studentValues.put("First_Name", "Бочаров");
+        studentValues.put("Name", " Евгений");
+        studentValues.put("Patronymic", "Юрьевич");
         studentValues.put("TIME", date);
         db.insert("students", null, studentValues);
 
-        studentValues.put("FIO", "Бажинов Иван Сергеевич");
-        studentValues.put("TIME", date);
-        db.insert("students", null, studentValues);
+    }
 
-        studentValues.put("FIO", "Петров Петр Петрович");
-        studentValues.put("TIME", date);
-        db.insert("students", null, studentValues);
+    private void updateDB(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion < 1) {
+            db.execSQL("CREATE TABLE students ("
+                    + "_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + "FIO TEXT, "
+                    + "TIME TEXT);");
 
-        studentValues.put("FIO", "Романов Роман Романович");
-        studentValues.put("TIME", date);
-        db.insert("students", null, studentValues);
+            db.execSQL("DELETE FROM students;");
+            ContentValues studentValues = new ContentValues();
+            String date = df.format(Calendar.getInstance().getTime());
+
+            studentValues.put("FIO", "Андрианов Владислав Алексеевич");
+            studentValues.put("TIME", date);
+            db.insert("students", null, studentValues);
+
+            studentValues.put("FIO", "Бочаров Евгений Юрьевич");
+            studentValues.put("TIME", date);
+            db.insert("students", null, studentValues);
+
+            studentValues.put("FIO", "Бажинов Иван Сергеевич");
+            studentValues.put("TIME", date);
+            db.insert("students", null, studentValues);
+
+            studentValues.put("FIO", "Петров Петр Петрович");
+            studentValues.put("TIME", date);
+            db.insert("students", null, studentValues);
+
+            studentValues.put("FIO", "Романов Роман Романович");
+            studentValues.put("TIME", date);
+            db.insert("students", null, studentValues);
+        }
+        if (oldVersion < 2) {
+            db.execSQL("DROP TABLE students;");
+            db.execSQL("CREATE TABLE students ("
+                    + "_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + "First_Name TEXT, "
+                    + "Name TEXT, "
+                    + "Patronymic TEXT, "
+                    + "TIME TEXT);");
+
+            ContentValues studentValues = new ContentValues();
+            String date = df.format(Calendar.getInstance().getTime());
+
+            studentValues.put("First_Name", "Андрианов");
+            studentValues.put("Name", " Владислав");
+            studentValues.put("Patronymic", "Алексеевич");
+            studentValues.put("TIME", date);
+            db.insert("students", null, studentValues);
+
+            studentValues.put("First_Name", "Бочаров");
+            studentValues.put("Name", " Евгений");
+            studentValues.put("Patronymic", "Юрьевич");
+            studentValues.put("TIME", date);
+            db.insert("students", null, studentValues);
+
+        }
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS students");
-        onCreate(db);
+        updateDB(db,oldVersion,newVersion);
     }
 }

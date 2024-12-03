@@ -45,8 +45,11 @@ public class MainActivity extends AppCompatActivity {
         ContentValues studentValues = new ContentValues();
         String date = df.format(Calendar.getInstance().getTime());
 
-        studentValues.put("FIO", "Кашеваров Андрей Евгеньевич");
+        studentValues.put("First_Name", "Кашеваров");
+        studentValues.put("Name", "Андрей");
+        studentValues.put("Patronymic", "Евгеньевич");
         studentValues.put("TIME", date);
+
         if(db.insert("students", null, studentValues) == -1) {
             Toast toast = Toast.makeText(this, "Ошибка при добавлении записи", Toast.LENGTH_SHORT);
             toast.show();
@@ -63,12 +66,14 @@ public class MainActivity extends AppCompatActivity {
         if(cursor.moveToFirst()) {
             id_key = cursor.getInt(0);
             ContentValues studentValue = new ContentValues();
-            studentValue.put("FIO", "Иванов Иван Иванович");
+            studentValue.put("First_Name", "Иванов");
+            studentValue.put("Name", "Иван");
+            studentValue.put("Patronymic", "Иванович");
             db.update("students",
                     studentValue,
                     "_id = ?",
                     new String[] {Integer.toString(id_key)});
-            Toast toast = Toast.makeText(this, "Запись добавлена", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(this, "Запись изменена", Toast.LENGTH_SHORT);
             toast.show();
         } else {
             Toast toast = Toast.makeText(this, "Ошибка при добавлении записи", Toast.LENGTH_SHORT);

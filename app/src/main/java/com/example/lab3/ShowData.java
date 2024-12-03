@@ -30,29 +30,41 @@ public class ShowData extends AppCompatActivity {
             DBHelper myDatabaseHelper = new DBHelper(this);
             SQLiteDatabase db = myDatabaseHelper.getReadableDatabase();
             Cursor cursor = db.query("students", new String[] {"_id",
-                    "FIO", "TIME"},null, null, null, null, null);
+                    "First_Name", "Name", "Patronymic", "TIME"},null, null, null, null, null);
 
 
             while (cursor.moveToNext()) {
                 TableRow tableRow = new TableRow(this);
                 String _id = cursor.getString(0);
-                String FIO = cursor.getString(1);
-                String TIME = cursor.getString(2);
+                String First_Name = cursor.getString(1);
+                String Name = cursor.getString(2);
+                String Patronymic = cursor.getString(3);
+                String TIME = cursor.getString(4);
 
                 TextView idTextView = new TextView(this);
                 idTextView.setText(_id);
                 idTextView.setPadding(8, 8, 8, 8);
                 tableRow.addView(idTextView);
 
-                TextView FIOTextView = new TextView(this);
-                FIOTextView.setText(FIO);
-                FIOTextView.setPadding(8, 8, 8, 8);
-                tableRow.addView(FIOTextView);
+                TextView F_name_TextView = new TextView(this);
+                F_name_TextView.setText(First_Name);
+                F_name_TextView.setPadding(8, 8, 8, 8);
+                tableRow.addView(F_name_TextView);
 
-                TextView TIMETextView = new TextView(this);
-                TIMETextView.setText(TIME);
-                TIMETextView.setPadding(8, 8, 8, 8);
-                tableRow.addView(TIMETextView);
+                TextView NameTextView = new TextView(this);
+                NameTextView.setText(Name);
+                NameTextView.setPadding(8, 8, 8, 8);
+                tableRow.addView(NameTextView);
+
+                TextView PTextView = new TextView(this);
+                PTextView.setText(Patronymic);
+                PTextView.setPadding(8, 8, 8, 8);
+                tableRow.addView(PTextView);
+
+                TextView TimeTextView = new TextView(this);
+                TimeTextView.setText(TIME);
+                TimeTextView.setPadding(8, 8, 8, 8);
+                tableRow.addView(TimeTextView);
 
                 tableLayout.addView(tableRow);
             }
